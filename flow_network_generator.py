@@ -15,10 +15,9 @@ class FlowNetworkGenerator:
         graph = DiGraph()
         source = 1
         sink = randrange(self.minNodes, self.maxNodes+1, 1)  # sink is last node
-        # max edges: n-1 nodes sending edges, each can send to n-1-1 nodes because can't send to source or self.
-        # source already considers itself, so it can send to n-1 nodes, so add 1 edge.
         min_edges = sink - 1
-        max_edges = (sink - 1) * (sink - 2) + 1
+        # max edges: n-1 + n-2 + ... + 1, or n*n-1/2.
+        max_edges = ((sink - 1) * sink) / 2
         edges = randrange(min_edges, max_edges+1, 1)
         unvisited = list(range(source, sink+1))
 
@@ -42,13 +41,21 @@ class FlowNetworkGenerator:
             next_node = choice(unvisited)
             unvisited.remove(next_node)
             graph.add_edge(current_node, next_node, label=randrange(1, self.maxWeight, 1))
-            edge_list.remove([current_node, next_node]) # remove list from valid edges
+            edge_list.remove([current_node, next_node])  # remove list from valid edges
+            try:
+                edge_list.remove([next_node, current_node])  # remove reverse list from valid edges
+            except ValueError:
+                pass
             current_node = next_node
 
         graph.add_edge(current_node, sink, label=randrange(1, self.maxWeight, 1))
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
             edge_list.remove(edge)
+            try:
+                edge_list.remove([edge[1], edge[0]])  # remove reverse edge
+            except ValueError:
+                pass
             graph.add_edge(edge[0], edge[1], label=randrange(1, self.maxWeight, 1))
         return graph
 
