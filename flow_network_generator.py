@@ -40,7 +40,8 @@ class FlowNetworkGenerator:
         while len(unvisited) > 0:
             next_node = choice(unvisited)
             unvisited.remove(next_node)
-            graph.add_edge(current_node, next_node, label=randrange(1, self.maxWeight, 1))
+            capacity = randrange(1, self.maxWeight, 1)
+            graph.add_edge(current_node, next_node, cap=capacity)
             edge_list.remove([current_node, next_node])  # remove list from valid edges
             try:
                 edge_list.remove([next_node, current_node])  # remove reverse list from valid edges
@@ -48,7 +49,8 @@ class FlowNetworkGenerator:
                 pass
             current_node = next_node
 
-        graph.add_edge(current_node, sink, label=randrange(1, self.maxWeight, 1))
+        capacity = randrange(1, self.maxWeight, 1)
+        graph.add_edge(current_node, sink, cap=capacity)
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
             edge_list.remove(edge)
@@ -56,7 +58,8 @@ class FlowNetworkGenerator:
                 edge_list.remove([edge[1], edge[0]])  # remove reverse edge
             except ValueError:
                 pass
-            graph.add_edge(edge[0], edge[1], label=randrange(1, self.maxWeight, 1))
+            capacity = randrange(1, self.maxWeight, 1)
+            graph.add_edge(edge[0], edge[1], cap=capacity)
         return graph
 
     def generate(self, num):
@@ -67,6 +70,19 @@ class FlowNetworkGenerator:
             g.draw("graph" + str(i) + ".png", format="png", prog="dot")
 
 
-gen = FlowNetworkGenerator()
-graph_num = 5
-gen.generate(graph_num)
+def generate_residual_graph(graph):
+    residual = DiGraph()
+    for n, lab in graph.nodes(data="label"):
+        if lab is not None:
+            residual.add_node(n, label=lab)
+        else:
+            residual.add_node(n)
+    for u, v, cap in graph.edges(data='cap'):
+        residual.add_edge(u, v, cap=cap, flow=cap)
+        residual.add_edge(v, u, cap=cap, flow=cap)
+    return residual
+
+
+# gen = FlowNetworkGenerator()
+# graph_num = 5
+# gen.generate(graph_num)

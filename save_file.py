@@ -4,6 +4,7 @@ import pygraphviz
 from networkx.drawing.nx_agraph import write_dot
 import os
 
+
 def save_graph(file_name, graph, dir, attributes, sep='/'):
 
     graph_label = None
