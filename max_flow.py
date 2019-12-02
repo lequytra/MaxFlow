@@ -2,6 +2,7 @@ import networkx as nx
 import copy
 import queue
 import math
+from flow_network_generator import *
 
 class Max_Flow_Generator():
     def __init__(self, G):
@@ -43,8 +44,19 @@ class Max_Flow_Generator():
                     s = e['source']
                     t = e['sink']
                     self.G[s][t]['flow'] += df
-                    self.G[t][s]['flow'] -= df
-
+                    try:
+                        self.G[t][s]['flow'] -= df
+                    except KeyError:
+                        print("{} {}".format(t, s))
                 f += df
 
         return f
+
+    def return_result(self, original_graph):
+        atts = nx.get_edge_attributes(self.G, 'flow')
+        nx.set_edge_attributes(original_graph, atts, 'flow')
+
+        return original_graph
+
+def main():
+    generator = FlowNetworkGenerator()

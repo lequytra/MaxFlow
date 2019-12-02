@@ -1,9 +1,10 @@
+import os
 from random import randrange
 from random import choice
 from networkx import DiGraph
 from networkx.drawing.nx_pydot import write_dot
 from pygraphviz import AGraph
-
+from save_file import *
 
 class FlowNetworkGenerator:
     def __init__(self, min_nodes=5, max_nodes=15, max_weight=20):
@@ -41,7 +42,7 @@ class FlowNetworkGenerator:
             next_node = choice(unvisited)
             unvisited.remove(next_node)
             capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(current_node, next_node, cap=capacity)
+            graph.add_edge(current_node, next_node, flow=0, cap=capacity)
             edge_list.remove([current_node, next_node])  # remove list from valid edges
             try:
                 edge_list.remove([next_node, current_node])  # remove reverse list from valid edges
@@ -50,7 +51,7 @@ class FlowNetworkGenerator:
             current_node = next_node
 
         capacity = randrange(1, self.maxWeight, 1)
-        graph.add_edge(current_node, sink, cap=capacity)
+        graph.add_edge(current_node, sink, flow=0, cap=capacity)
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
             edge_list.remove(edge)
@@ -59,15 +60,22 @@ class FlowNetworkGenerator:
             except ValueError:
                 pass
             capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(edge[0], edge[1], cap=capacity)
+            graph.add_edge(edge[0], edge[1], flow=0, cap=capacity)
         return graph
 
-    def generate(self, num):
+    def generate(self, num, write_graph=True, file_name='graph'):
         for i in range(1, num + 1):
             flow = self.generate_flow()
-            write_dot(flow, "graph" + str(i) + ".dot")
-            g = AGraph("graph" + str(i) + ".dot")
-            g.draw("graph" + str(i) + ".png", format="png", prog="dot")
+            if write_graph:
+                try:
+                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'), attributes=None)
+                except RuntimeError:
+                    pass
+                finally:
+                    return flow
+
+            return flow
+
 
 
 def generate_residual_graph(graph):
@@ -83,6 +91,10 @@ def generate_residual_graph(graph):
     return residual
 
 
-# gen = FlowNetworkGenerator()
-# graph_num = 5
-# gen.generate(graph_num)
+def main():
+    gen = FlowNetworkGenerator()
+    graph_num = 1
+    gen.generate(graph_num)
+
+if __name__=="__main__":
+    main()
