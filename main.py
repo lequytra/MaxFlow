@@ -15,14 +15,23 @@ def run_program(n_graph=10):
         sink = len(graph)
         max_, res_graph = solver.solve(residual, graph, 1, sink)
         # Save solutions
-        save_graph(file_name='graph_{}'.format(i + 1),
-                   graph=res_graph,
-                   dir=os.path.join(os.getcwd(), 'output_graphs'),
-                   attributes=None)
+        try:
+            save_graph(file_name='graph_{}'.format(i + 1),
+                       graph=res_graph,
+                       dir=os.path.join(os.getcwd(), 'output_graphs'),
+                       attributes=None)
+
+        except RuntimeError:
+            continue
 
 if __name__=="__main__":
 
-    parser = argparse.ArgumentParser(description="How many flow networks do you want to generate and solve?")
-    parser.add_argument()
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ngraphs", type=int,
+                        help="Enter the number of graphs here")
+    args = parser.parse_args()
+    if args.ngraphs:
+        run_program(args.ngraphs)
+    else:
+        run_program()
 

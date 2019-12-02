@@ -7,7 +7,7 @@ from pygraphviz import AGraph
 from save_file import *
 
 class FlowNetworkGenerator:
-    def __init__(self, min_nodes=5, max_nodes=15, max_weight=20):
+    def __init__(self, min_nodes=3, max_nodes=5, max_weight=20):
         self.minNodes = min_nodes
         self.maxNodes = max_nodes
         self.maxWeight = max_weight

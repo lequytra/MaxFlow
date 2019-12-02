@@ -10,17 +10,16 @@ class Max_Flow_Generator():
 
     def solve(self, G, original_graph, source, sink):
         f = 0
-
+        q = queue.Queue()
+        q.put(source)
         while True:
-            q = queue.Queue()
-            q.put(source)
-
-            pred = [None]*(len(G) + 1)
+            pred = [None]*(sink + 1)
             # while the queue is not empty
             while not q.empty():
                 curr = q.get()
 
                 for e in G.neighbors(curr):
+
                     if pred[e] is None and e != source and G[curr][e]['cap'] > G[curr][e]['flow']:
                         pred[e] = {'source': curr, 'sink': e,
                                    'cap': G[curr][e]['cap'], 'flow': G[curr][e]['flow']}
@@ -45,11 +44,13 @@ class Max_Flow_Generator():
                     G[s][t]['flow'] += df
                     try:
                         G[t][s]['flow'] -= df
+                        e = pred[e['source']]
                     except KeyError:
                         print("{} {}".format(t, s))
                 f += df
 
-            res_graph = self.return_result(G, original_graph)
+        res_graph = self.return_result(G, original_graph)
+        print(res_graph)
 
         return f, res_graph
 
