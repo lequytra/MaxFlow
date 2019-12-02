@@ -86,7 +86,7 @@ def generate_residual_graph(graph):
         else:
             residual.add_node(n)
     for u, v, cap in graph.edges(data='cap'):
-        residual.add_edge(u, v, cap=cap, flow=cap)
+        residual.add_edge(u, v, cap=cap, flow=0)
         residual.add_edge(v, u, cap=cap, flow=cap)
     return residual
 
