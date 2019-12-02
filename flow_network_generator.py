@@ -68,7 +68,7 @@ class FlowNetworkGenerator:
             flow = self.generate_flow()
             if write_graph:
                 try:
-                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'), attributes=None)
+                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'), attributes='cap')
                 except RuntimeError:
                     pass
                 finally:
