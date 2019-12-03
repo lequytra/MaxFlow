@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 def run_program(n_graph=10):
-    gen = FlowNetworkGenerator()
+    gen = FlowNetworkGenerator(min_nodes=5, max_nodes=15)
     solver = Max_Flow_Generator()
     for i in range(n_graph):
         # Generate graph and save files
@@ -21,8 +21,7 @@ def run_program(n_graph=10):
         try:
             save_graph(file_name='graph_{}'.format(i + 1),
                        graph=res_graph,
-                       dir=os.path.join(os.getcwd(), 'output_graphs'),
-                       attributes=None)
+                       dir=os.path.join(os.getcwd(), 'output_graphs'))
         except RuntimeError:
             continue
 

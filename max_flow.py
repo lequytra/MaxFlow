@@ -57,6 +57,9 @@ class Max_Flow_Generator():
 
     def return_result(self, G, original_graph):
         atts = nx.get_edge_attributes(G, 'flow')
+        caps = nx.get_edge_attributes(G, 'cap')
         nx.set_edge_attributes(original_graph, atts, 'flow')
+        for edge in original_graph.edges():
+            original_graph[edge[0]][edge[1]]['label'] = str(atts[edge]) + '/' + str(caps[edge])
 
         return original_graph

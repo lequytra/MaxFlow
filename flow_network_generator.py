@@ -8,7 +8,7 @@ from save_file import *
 
 
 class FlowNetworkGenerator:
-    def __init__(self, min_nodes=3, max_nodes=5, max_weight=20):
+    def __init__(self, min_nodes=5, max_nodes=15, max_weight=20):
         self.minNodes = min_nodes
         self.maxNodes = max_nodes
         self.maxWeight = max_weight
@@ -44,7 +44,7 @@ class FlowNetworkGenerator:
             next_node = choice(unvisited)
             unvisited.remove(next_node)
             capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(current_node, next_node, flow=0, cap=capacity)
+            graph.add_edge(current_node, next_node, cap=capacity, label=capacity)
             edge_list.remove([current_node, next_node])  # remove list from valid edges
             try:
                 edge_list.remove([next_node, current_node])  # remove reverse list from valid edges
@@ -53,7 +53,7 @@ class FlowNetworkGenerator:
             current_node = next_node
 
         capacity = randrange(1, self.maxWeight, 1)
-        graph.add_edge(current_node, sink, flow=0, cap=capacity)
+        graph.add_edge(current_node, sink, cap=capacity, label=capacity)
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
             edge_list.remove(edge)
@@ -62,7 +62,7 @@ class FlowNetworkGenerator:
             except ValueError:
                 pass
             capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(edge[0], edge[1], flow=0, cap=capacity)
+            graph.add_edge(edge[0], edge[1], cap=capacity, label=capacity)
         return graph
 
     def generate(self, num, write_graph=True, file_name='graph'):
@@ -70,8 +70,7 @@ class FlowNetworkGenerator:
             flow = self.generate_flow()
             if write_graph:
                 try:
-                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'),
-                               attributes='cap')
+                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'))
                 except RuntimeError:
                     pass
                 finally:
