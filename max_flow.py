@@ -10,9 +10,10 @@ class Max_Flow_Generator():
 
     def solve(self, G, original_graph, source, sink):
         f = 0
-        q = queue.Queue()
-        q.put(source)
+
         while True:
+            q = queue.Queue()
+            q.put(source)
             pred = [None]*(sink + 1)
             # while the queue is not empty
             while not q.empty():
@@ -50,7 +51,6 @@ class Max_Flow_Generator():
                 f += df
 
         res_graph = self.return_result(G, original_graph)
-        print(res_graph)
 
         return f, res_graph
 

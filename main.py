@@ -3,6 +3,7 @@ from max_flow import *
 from save_file import *
 import os
 import argparse
+import matplotlib.pyplot as plt
 
 def run_program(n_graph=10):
 
@@ -10,8 +11,10 @@ def run_program(n_graph=10):
     solver = Max_Flow_Generator()
     for i in range(n_graph):
         # Generate graph and save files
+        plt.close()
         graph = gen.generate(1, file_name='graph_{}'.format(i + 1))
         residual = generate_residual_graph(graph)
+        plt.close()
         sink = len(graph)
         max_, res_graph = solver.solve(residual, graph, 1, sink)
         # Save solutions
@@ -20,6 +23,7 @@ def run_program(n_graph=10):
                        graph=res_graph,
                        dir=os.path.join(os.getcwd(), 'output_graphs'),
                        attributes=None)
+
 
         except RuntimeError:
             continue
