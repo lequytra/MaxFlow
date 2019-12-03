@@ -5,8 +5,8 @@ import os
 import argparse
 import matplotlib.pyplot as plt
 
-def run_program(n_graph=10):
 
+def run_program(n_graph=10):
     gen = FlowNetworkGenerator()
     solver = Max_Flow_Generator()
     for i in range(n_graph):
@@ -23,13 +23,11 @@ def run_program(n_graph=10):
                        graph=res_graph,
                        dir=os.path.join(os.getcwd(), 'output_graphs'),
                        attributes=None)
-
-
         except RuntimeError:
             continue
 
-if __name__=="__main__":
 
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--ngraphs", type=int,
                         help="Enter the number of graphs here")

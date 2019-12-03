@@ -26,9 +26,12 @@ def save_graph(file_name, graph, dir, attributes=None, sep='/'):
     else:
         graph_label = nx.get_edge_attributes(graph, attributes)
 
+    node_labels = nx.get_node_attributes(graph, 'label')
+
     path = os.path.join(dir, file_name)
     pos = nx.random_layout(graph)
-    nx.draw_networkx(graph, with_labels=True, pos=pos)
+    nx.draw_networkx(graph, with_labels=False, pos=pos)
     nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=graph_label)
+    nx.draw_networkx_labels(graph, pos=pos, labels=node_labels)
     plt.savefig(path + '.png', format="PNG")
     write_dot(graph, path + '.dot')

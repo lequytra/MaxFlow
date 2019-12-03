@@ -4,6 +4,7 @@ import queue
 import math
 from flow_network_generator import *
 
+
 class Max_Flow_Generator():
     def __init__(self):
         pass

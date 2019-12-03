@@ -6,6 +6,7 @@ from networkx.drawing.nx_pydot import write_dot
 from pygraphviz import AGraph
 from save_file import *
 
+
 class FlowNetworkGenerator:
     def __init__(self, min_nodes=3, max_nodes=5, max_weight=20):
         self.minNodes = min_nodes
@@ -29,7 +30,8 @@ class FlowNetworkGenerator:
                 if b != a:
                     edge_list.append([a, b])
 
-        graph.add_nodes_from(unvisited)
+        for node in unvisited:
+            graph.add_node(node, label=str(node))
         graph.add_node(source, label="source")
         graph.add_node(sink, label="sink")
         unvisited.remove(sink)
@@ -68,14 +70,14 @@ class FlowNetworkGenerator:
             flow = self.generate_flow()
             if write_graph:
                 try:
-                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'), attributes='cap')
+                    save_graph(file_name, flow, dir=os.path.join(os.getcwd(), 'input_graphs'),
+                               attributes='cap')
                 except RuntimeError:
                     pass
                 finally:
                     return flow
 
             return flow
-
 
 
 def generate_residual_graph(graph):
@@ -95,6 +97,7 @@ def main():
     gen = FlowNetworkGenerator()
     graph_num = 1
     gen.generate(graph_num)
+
 
 if __name__=="__main__":
     main()
