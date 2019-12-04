@@ -43,28 +43,22 @@ class FlowNetworkGenerator:
         while len(unvisited) > 0:
             next_node = choice(unvisited)
             unvisited.remove(next_node)
-            capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(current_node, next_node, cap=capacity, label=capacity)
-            edge_list.remove([current_node, next_node])  # remove list from valid edges
-            try:
-                edge_list.remove([next_node, current_node])  # remove reverse list from valid edges
-            except ValueError:
-                pass
+            self.new_edge(current_node, next_node, graph, edge_list)
             current_node = next_node
-
-        capacity = randrange(1, self.maxWeight, 1)
-        graph.add_edge(current_node, sink, cap=capacity, label=capacity)
-        edge_list.remove([current_node, sink])
+        self.new_edge(current_node, sink, graph, edge_list)
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
-            edge_list.remove(edge)
-            try:
-                edge_list.remove([edge[1], edge[0]])  # remove reverse edge
-            except ValueError:
-                pass
-            capacity = randrange(1, self.maxWeight, 1)
-            graph.add_edge(edge[0], edge[1], cap=capacity, label=capacity)
+            self.new_edge(edge[0], edge[1], graph, edge_list)
         return graph
+
+    def new_edge(self, a, b, graph, edge_list):
+        capacity = randrange(1, self.maxWeight, 1)
+        graph.add_edge(a, b, cap=capacity, label=capacity)
+        edge_list.remove([a, b])  # remove list from valid edges
+        try:
+            edge_list.remove([b, a])  # remove reverse list from valid edges
+        except ValueError:
+            pass
 
     def generate(self, num, write_graph=True, file_name='graph'):
         for i in range(1, num + 1):
