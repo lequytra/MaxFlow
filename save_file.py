@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import networkx as nx
 from networkx.drawing.nx_agraph import write_dot
 from pygraphviz import AGraph
 import os

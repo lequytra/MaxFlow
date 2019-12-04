@@ -2,8 +2,6 @@ import os
 from random import randrange
 from random import choice
 from networkx import DiGraph
-from networkx.drawing.nx_pydot import write_dot
-from pygraphviz import AGraph
 from save_file import *
 
 
