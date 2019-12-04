@@ -54,6 +54,7 @@ class FlowNetworkGenerator:
 
         capacity = randrange(1, self.maxWeight, 1)
         graph.add_edge(current_node, sink, cap=capacity, label=capacity)
+        edge_list.remove([current_node, sink])
         while graph.size() < edges and len(edge_list) > 0:
             edge = choice(edge_list)  # extract random valid edge
             edge_list.remove(edge)
